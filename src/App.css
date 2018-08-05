@@ -1,0 +1,13 @@
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.ts-errors-hide,
+.hide{
+  display:none;
+}
