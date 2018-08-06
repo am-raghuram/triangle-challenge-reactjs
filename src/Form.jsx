@@ -25,6 +25,7 @@ class Form extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    //Assigning input to state on Change
     handleChange(event) {
         const target = event.target;
         const value = target.value;
@@ -36,13 +37,16 @@ class Form extends Component {
 
     }
 
+    //On Form Submit
     handleSubmit(event) {
         this.setState({ submit: true });
-        // alert('A name was submitted: ' + this.state.side1);
+
+        //Retrieving the sides from state         
         var x = this.state.side1;
         var y = this.state.side2;
         var z = this.state.side3;
 
+        //Sorting the sides and assigning in descending order of length to perform triangle validation
         var sorted = [x, y, z].sort((a, b) => {
             return b - a;
         });
@@ -52,9 +56,13 @@ class Form extends Component {
         y = sorted[1];
         z = sorted[2];
 
-        console.log(x + "---" + y + "---" + z);
-
-
+      //Triangle Object
+      /**********
+       * Side1, Side2, Side 3  
+       * type() - Returns type of triangle, validitates and returns if invalid
+       * height() - Used to determine the points for plotting the triangle
+       * short() - Used to determine the points for plotting the triangle
+       ***********/
         var triangle = {
             side1: parseFloat(x),
             side2: parseFloat(y),
@@ -63,7 +71,7 @@ class Form extends Component {
             type: function () {
 
                 if ((this.side1 > 0 && this.side2 > 0 && this.side3 > 0) && (this.side1 <= (this.side2 + this.side3))) {
-                    
+
                     this.validTriangle = true;
                     if (this.side1 === this.side2 && this.side2 === this.side3 && this.side3 === this.side1) {
                         return "Equilateral";
@@ -98,8 +106,9 @@ class Form extends Component {
 
         this.setState({ result: triangle.type() });
         console.log(triangle.validTriangle);
-        this.setState({validTriangle: triangle.validTriangle});
+        this.setState({ validTriangle: triangle.validTriangle });
 
+        //Construction the polygon(triangle) based on calcualted points
         if (triangle.validTriangle) {
             var x1 = x;
             var x2 = triangle.short();
@@ -112,6 +121,7 @@ class Form extends Component {
     }
 
     render() {
+        //Actual Form HTML with inline validations
         return (
             <div>
                 <form data-ts="Form" id="triangle-input" onSubmit={this.handleSubmit}>
@@ -121,7 +131,7 @@ class Form extends Component {
                             <label >Side X:</label>
                             <input type="number" name="side1" id="side1" className="form-control" required value={this.state.side1} onChange={this.handleChange} />
                         </label>
-                        <dl className={(this.state.submit && this.state.side1 ==='' ? 'ts-errors' : 'ts-errors-hide')}>
+                        <dl className={(this.state.submit && this.state.side1 === '' ? 'ts-errors' : 'ts-errors-hide')}>
                             <dt>Error: Enter a numeric value </dt>
                         </dl>
 
@@ -155,7 +165,7 @@ class Form extends Component {
                     <h3>Result:
 					<span id="type" className="text-info"> {this.state.result}</span>
                     </h3>
-                    <div id="picture" className={!this.state.validTriangle  ? 'hide' : ''}>
+                    <div id="picture" className={!this.state.validTriangle ? 'hide' : ''}>
                         <svg height="300" width="400">
                             <polygon style={polyStyle} points={this.state.polyPoints} />
                         </svg>
